@@ -2387,6 +2387,10 @@ const OFFLINE_QUESTION_BANK = {
 
 // Global App State
 const AppState = {
+  // SPA Routing & Navigation State
+  currentView: "config",
+  isPoppingState: false,
+
   // Streams & Subjects
   activeStream: "cse",
   subject: "python",
@@ -4599,10 +4603,106 @@ document.addEventListener('DOMContentLoaded', () => {
   updateApiKeyIndicator();
   bindStudioEvents();
   initModalWatchers();
+  SpaRouter.init();
 
   // STEP 1: First thing when website opens is Sign-In (if not already completed)
   startOnboardingFlow();
 });
+
+// Interactive modal helper for SPA history
+const ModalHistory = {
+  isModalOpen() {
+    const selector = '#profileAuthModal:not(.hidden), #apiKeyModal:not(.hidden), #highDemandModal:not(.hidden), #apiErrorModal:not(.hidden)';
+    return document.querySelector(selector) !== null;
+  },
+  closeOpenModals() {
+    const selector = '#profileAuthModal:not(.hidden), #apiKeyModal:not(.hidden), #highDemandModal:not(.hidden), #apiErrorModal:not(.hidden)';
+    const modals = document.querySelectorAll(selector);
+    let closedCount = 0;
+    modals.forEach(m => {
+      // Don't close onboarding mandatory modal if Google auth is mandatory and unauthenticated
+      if (m.id === 'profileAuthModal' && AppState.isOnboarding && (!AppState.user || !AppState.user.isGoogleAuth)) {
+        return;
+      }
+      m.classList.add('hidden');
+      closedCount++;
+    });
+    if (closedCount > 0) {
+      document.body.classList.remove('modal-open');
+    }
+    return closedCount > 0;
+  }
+};
+
+// SPA History & Navigation Router (React Single-Page Application behavior)
+const SpaRouter = {
+  initialized: false,
+
+  init() {
+    if (this.initialized) return;
+    this.initialized = true;
+
+    // 1. Initial State from URL hash
+    const currentHash = window.location.hash ? window.location.hash.replace(/^#\/?/, '').trim() : '';
+    const validViews = ['config', 'leaderboard', 'memory', 'advisor', 'player', 'scorecard'];
+    const initialView = validViews.includes(currentHash) ? currentHash : 'config';
+
+    AppState.currentView = initialView;
+    const initialUrl = initialView === 'config' ? (window.location.pathname + window.location.search) : '#' + initialView;
+    window.history.replaceState({ view: initialView }, '', initialUrl);
+
+    if (initialView !== 'config') {
+      showView(initialView, false);
+    }
+
+    // 2. Browser Back / Forward Navigation Handler
+    window.addEventListener('popstate', (e) => {
+      this.handlePopState(e);
+    });
+
+    // 3. Leaderboard Back to Studio Button
+    const lbBackBtn = document.getElementById('leaderboardBackToStudioBtn');
+    if (lbBackBtn) {
+      lbBackBtn.addEventListener('click', () => {
+        showView('config');
+      });
+    }
+  },
+
+  handlePopState(event) {
+    AppState.isPoppingState = true;
+    try {
+      // Step A: If an interactive modal is currently open, close it (back = dismiss modal)
+      if (ModalHistory.isModalOpen()) {
+        const closed = ModalHistory.closeOpenModals();
+        if (closed) {
+          return;
+        }
+      }
+
+      // Step B: Determine destination view from history state or URL hash
+      const stateView = event.state && event.state.view;
+      const hashView = window.location.hash ? window.location.hash.replace(/^#\/?/, '').trim() : '';
+      const targetView = stateView || hashView || 'config';
+
+      // Step C: Quiz protection if moving away from an active quiz
+      if (AppState.currentView === 'player' && targetView !== 'player') {
+        const confirmExit = window.confirm("⚠️ Quit active contest and return to arena setup? Your progress will be lost.");
+        if (!confirmExit) {
+          // Keep user inside quiz by re-pushing state
+          window.history.pushState({ view: 'player' }, '', '#player');
+          return;
+        }
+        clearInterval(AppState.timerInterval);
+      }
+
+      // Step D: Show target view without pushing duplicate history
+      showView(targetView, false);
+    } finally {
+      AppState.isPoppingState = false;
+    }
+  }
+};
 
 function initModalWatchers() {
   let wasOpen = null;
@@ -4613,6 +4713,16 @@ function initModalWatchers() {
 
     if (isAnyModalOpen) {
       document.body.classList.add('modal-open');
+      // Push modal history state if user opened an interactive modal and not currently popping
+      if (!AppState.isPoppingState && ModalHistory.isModalOpen()) {
+        if (!(AppState.isOnboarding && (!AppState.user || !AppState.user.isGoogleAuth))) {
+          const curView = AppState.currentView || 'config';
+          if (!window.history.state || !window.history.state.isModal) {
+            const curUrl = curView === 'config' ? (window.location.pathname + window.location.search) : '#' + curView;
+            window.history.pushState({ view: curView, isModal: true }, '', curUrl);
+          }
+        }
+      }
     } else {
       document.body.classList.remove('modal-open');
       if (typeof LeaderboardManager !== 'undefined' && LeaderboardManager.pendingRender) {
@@ -7266,8 +7376,10 @@ const AdvisorChatManager = {
   }
 };
 
-// View Routing Manager
-function showView(viewName) {
+// View Routing Manager (Single Page History Router)
+function showView(viewName, pushHistory = true) {
+  if (!viewName) viewName = 'config';
+
   const config = document.getElementById('configSection');
   const leaderboard = document.getElementById('leaderboardSection');
   const memory = document.getElementById('memorySection');
@@ -7290,6 +7402,12 @@ function showView(viewName) {
     else advisorTab.classList.remove('active');
   }
 
+  const leaderboardTab = document.getElementById('tabLeaderboardNav');
+  if (leaderboardTab) {
+    if (viewName === 'leaderboard' || viewName === 'memory') leaderboardTab.classList.add('active');
+    else leaderboardTab.classList.remove('active');
+  }
+
   if (viewName === 'config') {
     if (config) config.classList.remove('hidden');
   } else if (viewName === 'leaderboard' || viewName === 'memory') {
@@ -7307,6 +7425,17 @@ function showView(viewName) {
     if (scorecard) scorecard.classList.remove('hidden');
   }
 
+  // SPA History Routing: Push state on view change (React Single Page App behavior)
+  if (pushHistory && !AppState.isPoppingState) {
+    const isTransient = (viewName === 'loading');
+    if (!isTransient && AppState.currentView !== viewName) {
+      const targetHash = (viewName === 'config') ? '' : '#' + viewName;
+      const targetUrl = window.location.pathname + window.location.search + targetHash;
+      window.history.pushState({ view: viewName }, '', targetUrl);
+    }
+  }
+
+  AppState.currentView = viewName;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
