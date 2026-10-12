@@ -535,9 +535,9 @@ Return ONLY a valid JSON array of objects with fields:
   });
 }
 
-const server = http.createServer(handleRequest);
+const server = (http && typeof http.createServer === 'function') ? http.createServer(handleRequest) : null;
 
-if (require.main === module) {
+if (server && typeof require !== 'undefined' && require.main === module) {
   server.listen(PORT, () => {
     console.log(`\n  ▲ Synapse AI Studio running locally:`);
     console.log(`  > Local:   http://localhost:${PORT}`);

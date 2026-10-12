@@ -2,7 +2,7 @@
   "name": "synapse-ai-quiz-studio",
   "version": "2.4.0",
   "description": "AI-powered assessment quiz studio using Google Gemini 3.8 Flash",
-  "main": "server/server.js",
+  "main": "index.html",
   "scripts": {
     "start": "node server/server.js",
     "dev": "node server/server.js",
