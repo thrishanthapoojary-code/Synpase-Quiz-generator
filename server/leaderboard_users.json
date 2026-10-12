@@ -1,0 +1,80 @@
+{
+  "alex_coder": {
+    "uid": "alex_coder",
+    "handle": "alex_coder",
+    "displayName": "alex_coder",
+    "rating": 1850,
+    "solved": 42,
+    "accuracy": 85,
+    "streak": 3,
+    "stream": "cse",
+    "badge": "Specialist",
+    "avatarUrl": "",
+    "lastUpdated": 1791786894299
+  },
+  "thrishantha_p": {
+    "uid": "thrishantha_p",
+    "handle": "thrishantha_p",
+    "displayName": "Thrishantha",
+    "rating": 2520,
+    "solved": 180,
+    "accuracy": 96,
+    "streak": 12,
+    "stream": "cse",
+    "badge": "Specialist",
+    "avatarUrl": "",
+    "lastUpdated": 1791787464351
+  },
+  "sarah_coder": {
+    "uid": "sarah_coder",
+    "handle": "sarah_coder",
+    "displayName": "Sarah Coder",
+    "rating": 2610,
+    "solved": 195,
+    "accuracy": 94,
+    "streak": 10,
+    "stream": "jee",
+    "badge": "Specialist",
+    "avatarUrl": "",
+    "lastUpdated": 1791787464363
+  },
+  "lliv9hyxcryoovrkylal0gqb0hd3": {
+    "uid": "lliV9HyXcrYoOVRKYLal0gQB0hD3",
+    "handle": "infinix_pc",
+    "displayName": "infinix pc",
+    "rating": 1495,
+    "solved": 30,
+    "accuracy": 66,
+    "streak": 4,
+    "stream": "cse",
+    "badge": "Pupil",
+    "avatarUrl": "https://lh3.googleusercontent.com/a/ACg8ocKWq4pCiKZe19tGnyemmcqCfe7DhmMM2e3Jr3zb7sVhMPSlqA=s96-c",
+    "lastUpdated": 1791803212442
+  },
+  "ycvqioxiuxc9a6vvujmdptwe9je3": {
+    "uid": "YcVQioXiUXc9A6vvUjmdPTWe9JE3",
+    "handle": "samaki3407",
+    "displayName": "samaki3407",
+    "rating": 1500,
+    "solved": 28,
+    "accuracy": 85,
+    "streak": 4,
+    "stream": "cse",
+    "badge": "Specialist",
+    "avatarUrl": "https://api.dicebear.com/7.x/bottts/svg?seed=CoderHero",
+    "lastUpdated": 1791791395114
+  },
+  "h6ao4ua2junwjuf2gdzie1zwitz1": {
+    "uid": "H6aO4uA2JUNwjuf2gDzIE1ZwiTz1",
+    "handle": "fig8fw14rq",
+    "displayName": "fig8fw14rq",
+    "rating": 1500,
+    "solved": 28,
+    "accuracy": 85,
+    "streak": 4,
+    "stream": "cse",
+    "badge": "Specialist",
+    "avatarUrl": "https://api.dicebear.com/7.x/bottts/svg?seed=CoderHero",
+    "lastUpdated": 1791793310048
+  }
+}

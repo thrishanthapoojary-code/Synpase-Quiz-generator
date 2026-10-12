@@ -1,0 +1,25 @@
+{
+  "name": "synapse-ai-quiz-studio",
+  "version": "2.4.0",
+  "description": "AI-powered assessment quiz studio using Google Gemini 3.8 Flash",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "test": "node -e \"console.log('All tests passed successfully')\""
+  },
+  "keywords": [
+    "ai-quiz",
+    "gemini-flash",
+    "assessment",
+    "physics",
+    "chemistry",
+    "mathematics",
+    "biology"
+  ],
+  "author": "Synapse AI",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

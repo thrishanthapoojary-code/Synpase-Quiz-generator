@@ -1,0 +1,164 @@
+{
+  "version": "3.0.0",
+  "streams": {
+    "cse": {
+      "name": "Computer Science & Engineering",
+      "icon": "💻",
+      "languages": [
+        {
+          "id": "c",
+          "name": "C Language",
+          "icon": "⚡",
+          "topics": [
+            { "title": "Pointers, Memory & Addresses", "sub": "Pointer Arithmetic, Void Pointers & Dereferencing" },
+            { "title": "Dynamic Memory Allocation", "sub": "malloc, calloc, realloc, free & Memory Leaks" },
+            { "title": "Structures, Unions & Bitfields", "sub": "Memory Alignment, Padding & Bit Operations" },
+            { "title": "File I/O & Buffer Operations", "sub": "fopen, fread, fwrite, fseek & File Descriptors" },
+            { "title": "Strings & Array Manipulation", "sub": "Null Terminators, Buffer Overflows & String.h" },
+            { "title": "Preprocessor Macros & Compilation", "sub": "#define, Header Guards, Linker & Storage Classes" }
+          ]
+        },
+        {
+          "id": "cpp",
+          "name": "C++",
+          "icon": "🚀",
+          "topics": [
+            { "title": "OOP, Virtual Functions & Vtables", "sub": "Polymorphism, Abstract Classes & Object Slicing" },
+            { "title": "STL Containers & Iterators", "sub": "Vector, Map, Unordered Map, Deque & Complexity" },
+            { "title": "Smart Pointers & RAII", "sub": "unique_ptr, shared_ptr, weak_ptr & Move Semantics" },
+            { "title": "Templates, Metaprogramming & Concepts", "sub": "Generic Programming, Type Traits & SFINAE" },
+            { "title": "Multithreading & Concurrency", "sub": "std::thread, mutex, atomic, lock_guard & Condition Variables" },
+            { "title": "Lambda Expressions & Functors", "sub": "Closures, std::function & Modern C++ Features" }
+          ]
+        },
+        {
+          "id": "java",
+          "name": "Java",
+          "icon": "☕",
+          "topics": [
+            { "title": "JVM Architecture & Memory Model", "sub": "Heap, Stack, Metaspace & Garbage Collection" },
+            { "title": "Collections Framework", "sub": "HashMap internals, ConcurrentHashMap & TreeMap" },
+            { "title": "OOP & Interface Design", "sub": "Inheritance, Abstract Classes, Default Methods & Encapsulation" },
+            { "title": "Multithreading & ExecutorService", "sub": "Threads, Synchronized, Volatile, CompletableFuture" },
+            { "title": "Java Streams & Lambdas", "sub": "Functional Interfaces, Map-Reduce, Collectors & Optionals" },
+            { "title": "Exception Handling & Reflection", "sub": "Checked vs Unchecked, Try-with-resources, Dynamic Invocation" }
+          ]
+        },
+        {
+          "id": "python",
+          "name": "Python",
+          "icon": "🐍",
+          "topics": [
+            { "title": "OOP, Classes & Magic Methods", "sub": "__init__, __str__, __call__, Inheritance & MRO" },
+            { "title": "List Comprehensions & Generators", "sub": "Iterators, Yield, Memory-Efficient Streams & Itertools" },
+            { "title": "Decorators, Closures & Scopes", "sub": "Higher-order functions, Wrappers & LEGB Rule" },
+            { "title": "Data Structures & Collections", "sub": "Dict, Set, Counter, Deque, Heapq & Time Complexity" },
+            { "title": "Asyncio & Concurrent Execution", "sub": "Coroutines, Event Loop, Await, Threading vs Multiprocessing" },
+            { "title": "File Handling & Context Managers", "sub": "With statements, __enter__, __exit__, Pathlib & Serialization" }
+          ]
+        },
+        {
+          "id": "javascript",
+          "name": "JavaScript",
+          "icon": "💛",
+          "topics": [
+            { "title": "Event Loop & Asynchronous JS", "sub": "Microtasks, Macrotasks, Call Stack & Concurrency" },
+            { "title": "Promises, Async/Await & Fetch", "sub": "Promise.all, Error Handling & Microtask Queue" },
+            { "title": "Closures, Lexical Scope & 'this'", "sub": "Execution Context, Call/Apply/Bind & Arrow Functions" },
+            { "title": "Prototypes & ES6 Classes", "sub": "Prototype Chain, Object.create, Class Inheritance" },
+            { "title": "DOM Manipulation & Event Bubbling", "sub": "Event Delegation, Capture, MutationObserver" },
+            { "title": "ES6+ Modern Features & Modules", "sub": "Destructuring, Spread, Rest, Sets, Maps & ESM" }
+          ]
+        },
+        {
+          "id": "go",
+          "name": "Go (Golang)",
+          "icon": "🐹",
+          "topics": [
+            { "title": "Goroutines, Channels & Select", "sub": "CSP Concurrency, Buffered Channels & Deadlocks" },
+            { "title": "Interfaces & Duck Typing", "sub": "Implicit Implementation, Empty Interface, Type Assertions" },
+            { "title": "Pointers, Slices & Memory Allocation", "sub": "Slice Headers, Append, Array vs Slice, Escape Analysis" },
+            { "title": "Structs, Embedding & Methods", "sub": "Composition over Inheritance, Field Tags & JSON" },
+            { "title": "Error Handling & Panic/Recover", "sub": "Explicit Errors, Custom Errors, Defer Statements" },
+            { "title": "Go Context & HTTP Microservices", "sub": "context.Context, Cancellation, Deadlines & Routing" }
+          ]
+        },
+        {
+          "id": "html",
+          "name": "HTML5",
+          "icon": "🌐",
+          "topics": [
+            { "title": "Semantic Structure & Accessibility (a11y)", "sub": "ARIA Attributes, Landmarks, Screen Readers & Semantics" },
+            { "title": "HTML5 Forms, Validation & Inputs", "sub": "Regex Pattern, Constraint Validation & Custom Controls" },
+            { "title": "Audio, Video & Media Elements", "sub": "Codecs, Track/Subtitles, WebRTC & Responsive Images" },
+            { "title": "Canvas 2D & SVG Vector Graphics", "sub": "Pixel Manipulation, Paths, Bezier Curves & Canvas Rendering" },
+            { "title": "Web Storage & Client Persistence", "sub": "LocalStorage, SessionStorage, IndexedDB & Cookies" },
+            { "title": "Modern Meta Tags & SEO Optimization", "sub": "OpenGraph, Viewport, Twitter Cards & Structured Data" }
+          ]
+        },
+        {
+          "id": "css",
+          "name": "CSS3",
+          "icon": "🎨",
+          "topics": [
+            { "title": "Flexbox Layout Architecture", "sub": "Justify, Align, Flex Grow/Shrink, Basis & Alignment" },
+            { "title": "CSS Grid Systems & Subgrid", "sub": "Template Areas, Auto-fit, Minmax & 2D Layouts" },
+            { "title": "CSS Variables, Theming & Tokens", "sub": "Custom Properties, Dark/Light Mode & Specificity" },
+            { "title": "Transitions, Keyframe Animations & GPU", "sub": "Transform, Will-Change, Cubic-Bezier & 60fps" },
+            { "title": "Box Model, Stacking Context & Z-Index", "sub": "Margin Collapse, Isolation, Positioning & Overflow" },
+            { "title": "Responsive Media Queries & Fluid Typography", "sub": "Clamp(), Container Queries, Clamp, Aspect-Ratio" }
+          ]
+        }
+      ]
+    },
+    "pcmn": {
+      "name": "Science Stream (PCMN)",
+      "icon": "🔬",
+      "languages": [
+        {
+          "id": "physics",
+          "name": "Physics",
+          "icon": "⚛",
+          "topics": [
+            { "title": "Kinematics & Newton's Laws", "sub": "Motion, Vectors & Force Dynamics" },
+            { "title": "Work, Energy & Power", "sub": "Conservation Laws & Collisions" },
+            { "title": "Gravitation & Satellite Motion", "sub": "Kepler's Laws & Potential" },
+            { "title": "Thermodynamics & Heat Engine", "sub": "Entropy, Carnot Cycle & Gas Laws" },
+            { "title": "Electrostatics & Capacitance", "sub": "Coulomb's Law, Gauss Theorem & Dielectrics" },
+            { "title": "Current Electricity & Circuits", "sub": "Kirchhoff's Rules, Drift Velocity" },
+            { "title": "Wave Optics & Interference", "sub": "Young's Double Slit & Diffraction" },
+            { "title": "Modern Physics & Quantum", "sub": "Photoelectric Effect & Bohr Model" }
+          ]
+        },
+        {
+          "id": "chemistry",
+          "name": "Chemistry",
+          "icon": "🧪",
+          "topics": [
+            { "title": "Chemical Bonding & Molecular Orbitals", "sub": "VSEPR, Hybridization & Dipole Moments" },
+            { "title": "Thermodynamics & Equilibrium", "sub": "Gibbs Free Energy, Le Chatelier & pH" },
+            { "title": "Organic Mechanisms & Hydrocarbons", "sub": "Electrophilic Addition & Resonance" },
+            { "title": "Periodic Trends & Coordination Compounds", "sub": "Ligands, Crystal Field Theory" },
+            { "title": "Electrochemistry & Redox Reactions", "sub": "Nernst Equation, Galvanic Cells" },
+            { "title": "Chemical Kinetics & Rate Laws", "sub": "Arrhenius Equation & Order" },
+            { "title": "Solutions & Colligative Properties", "sub": "Raoult's Law & Van 't Hoff" }
+          ]
+        },
+        {
+          "id": "mathematics",
+          "name": "Mathematics",
+          "icon": "📐",
+          "topics": [
+            { "title": "Differential Calculus & Tangents", "sub": "Limits, Chain Rule & Extreme Values" },
+            { "title": "Integral Calculus & Definite Integrals", "sub": "Substitution, By Parts & Area" },
+            { "title": "Matrices & Determinants", "sub": "Eigenvalues, Matrix Inversion & Cramer" },
+            { "title": "Probability & Permutations", "sub": "Bayes' Theorem, Combinatorics" },
+            { "title": "Trigonometric Functions & Identities", "sub": "Inverse Trigonometry & Waves" },
+            { "title": "Coordinate Geometry & Conic Sections", "sub": "Parabola, Ellipse & Hyperbola" },
+            { "title": "Vectors & 3D Analytical Geometry", "sub": "Dot/Cross Product, Lines & Planes" }
+          ]
+        }
+      ]
+    }
+  }
+}

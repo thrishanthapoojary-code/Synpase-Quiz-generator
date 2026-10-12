@@ -1,0 +1,16 @@
+{
+  "name": "Synapse AI Quiz Studio",
+  "short_name": "SynapseAI",
+  "description": "Next.js / Vercel style cognitive quiz assessment studio powered by Google Gemini",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

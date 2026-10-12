@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synapse • Competitive Quiz & Coding Arena</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#fff0f5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@400;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Firebase SDK (Compat Version for seamless drop-in Google Auth & Firestore) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <!-- Fullscreen celebration confetti canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Ambient aurora glow orbs (Worksbuddy celestial lighting / Pink blush lighting) -->
+  <div class="ambient-glow glow-top-left"></div>
+  <div class="ambient-glow glow-bottom-right"></div>
+
+  <!-- Background grid texture overlay -->
+  <div class="grid-background"></div>
+
+  <!-- Top Navigation (LeetCode / CodeChef + Worksbuddy Header) -->
+  <header class="next-nav">
+    <div class="nav-container">
+      <div class="brand-zone">
+        <a href="#home" id="brandHomeBtn" class="brand-link" title="SYNAPSE • ARENA (Click to return Home)">
+          <div class="next-logo">
+            <svg viewBox="0 0 76 65" fill="currentColor">
+              <path d="M37.5274 0L75.0548 65H0L37.5274 0Z" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">SYNAPSE<span class="brand-badge-highlight">ARENA</span></span>
+          </div>
+        </a>
+
+        <!-- Stream Navigation Tabs -->
+        <div class="stream-nav-tabs">
+          <button type="button" class="stream-tab active" id="tabStreamCSE" data-stream="cse">
+            <span>💻 CSE Coding</span>
+          </button>
+          <button type="button" class="stream-tab" id="tabStreamJEE" data-stream="jee">
+            <span>🎯 JEE Main & Adv</span>
+          </button>
+          <button type="button" class="stream-tab" id="tabStreamNEET" data-stream="neet">
+            <span>🩺 NEET Medical</span>
+          </button>
+          <button type="button" class="stream-tab" id="tabStreamPCMN" data-stream="pcmn">
+            <span>🔬 Science & Academics</span>
+          </button>
+          <button type="button" class="stream-tab" id="tabWeekendContestNav">
+            <span>⚡ Weekend Contest</span>
+          </button>
+          <button type="button" class="stream-tab" id="tabLeaderboardNav">
+            <span>🏆 Leaderboard</span>
+          </button>
+          <button type="button" class="stream-tab" id="tabAiAdvisorNav">
+            <span>💬 AI Skill Coach</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-controls">
+        <!-- Theme Toggle: Worksbuddy Dark vs Pink Glassmorphism Light -->
+        <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme (Worksbuddy Dark / Pink Glass Light)">
+          <svg id="moonIcon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg id="sunIcon" class="theme-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+
+        <!-- API Key Status Pill -->
+        <button id="apiKeyBtn" class="next-pill-btn" title="View / Configure / Test Gemini API Key">
+          <span class="status-indicator" id="apiKeyStatusDot"></span>
+          <span id="apiKeyBtnLabel">Test API Key</span>
+        </button>
+
+        <!-- Firebase Google Auth User Profile Pill -->
+        <div class="user-auth-wrap">
+          <button id="userAuthBtn" class="user-profile-pill">
+            <img id="userAvatarImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=CoderHero" alt="User Avatar"
+              class="user-avatar-small">
+            <div class="user-pill-info">
+              <span id="userDisplayName" class="user-handle-text">@guest_coder</span>
+              <span id="userRatingBadge" class="user-rank-badge">1500 • Knight</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="page-container">
+
+    <!-- ====================================================================
+         VIEW 1: ARENA QUIZ STUDIO (PCMN & CSE STREAM SELECTION)
+         ==================================================================== -->
+    <section id="configSection" class="studio-wrapper">
+      <div class="hero-header">
+        <div class="tag-pill">
+          <span class="tag-mono" id="heroStreamBadge">CSE ARENA</span>
+          <span class="tag-divider">|</span>
+          <span>Competitive Skill Assessments</span>
+        </div>
+        <h1 class="hero-title" id="heroDynamicTitle">Master Coding & Science Concepts</h1>
+        <p class="hero-desc" id="heroDynamicDesc">
+          Solve LeetCode/CodeChef-grade programming challenges and PCMN assessments powered by Gemini 3.8 Flash,
+          featuring structured handwritten derivations.
+        </p>
+      </div>
+
+      <!-- Live Weekend Contest Banner Card -->
+      <div class="weekend-contest-banner" id="weekendContestBanner">
+        <div class="wc-banner-content">
+          <div class="wc-tag-row">
+            <span class="wc-live-badge" id="wcLiveBadge"><span class="pulse-live"></span> <span id="wcLiveBadgeText">📚
+                PREVIOUS WEEKEND'S QUESTIONS (PRACTICE ARCHIVE)</span></span>
+            <span class="wc-countdown-text" id="wcCountdownContainer"><span id="wcCountdownLabel">Next Live Battle
+                in:</span> <strong id="wcTimerCountdown">04d 13h 54m 00s</strong></span>
+          </div>
+          <div class="wc-info-row">
+            <div>
+              <h2 class="wc-title" id="wcTitle">Weekend Arena — Previous Weekend's Questions</h2>
+              <p class="wc-sub" id="wcSub">Practicing with Previous Weekend's Questions • 4 Multi-disciplinary Problems
+                • 45 Min Timer • Next Live Battle Opens Saturday</p>
+            </div>
+            <button type="button" id="startWeekendContestBtn" class="next-btn-primary sm wc-start-btn">
+              <span id="wcStartBtnText">Practice Previous Weekend's Questions</span>
+              <span>⚡</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <form id="quizForm" class="next-card">
+
+        <!-- Stream Toggle Cards -->
+        <div class="section-block">
+          <div class="section-label">
+            <span class="label-idx">1</span>
+            <span class="label-name">Choose Assessment Stream</span>
+          </div>
+          <div class="stream-selector-cards">
+            <div class="stream-card active" data-stream="cse" id="streamCardCSE">
+              <div class="stream-icon">💻</div>
+              <div class="stream-card-body">
+                <h3>Computer Science (CSE)</h3>
+                <p>C, C++, Java, Python, JavaScript, Go, HTML, CSS & Algorithms</p>
+              </div>
+              <div class="stream-check">✓</div>
+            </div>
+
+            <div class="stream-card" data-stream="jee" id="streamCardJEE">
+              <div class="stream-icon">🎯</div>
+              <div class="stream-card-body">
+                <h3>IIT JEE (Main & Adv)</h3>
+                <p>Hard PCM: Advanced Physics, Chemistry & Higher Mathematics</p>
+              </div>
+              <div class="stream-check">✓</div>
+            </div>
+
+            <div class="stream-card" data-stream="neet" id="streamCardNEET">
+              <div class="stream-icon">🩺</div>
+              <div class="stream-card-body">
+                <h3>NEET Medical Arena</h3>
+                <p>Hard PCB: High-Yield Botany, Zoology, Physics & Chemistry</p>
+              </div>
+              <div class="stream-check">✓</div>
+            </div>
+
+            <div class="stream-card" data-stream="pcmn" id="streamCardPCMN">
+              <div class="stream-icon">🔬</div>
+              <div class="stream-card-body">
+                <h3>Science & Academics</h3>
+                <p>Physics, Chemistry, Mathematics, Biology & Social Science</p>
+              </div>
+              <div class="stream-check">✓</div>
+            </div>
+          </div>
+          <input type="hidden" id="activeStreamInput" value="cse">
+        </div>
+
+        <!-- Language / Subject Dynamic Pills -->
+        <div class="section-block">
+          <div class="section-label-row">
+            <div class="section-label">
+              <span class="label-idx">2</span>
+              <span class="label-name" id="subjectSectionLabel">Select Programming Language</span>
+            </div>
+            <button type="button" id="toggleCustomSubjectBtn" class="next-pill-btn secondary sm">
+              <span>+ Custom Subject</span>
+            </button>
+          </div>
+          <div class="subject-pills-row" id="subjectCards">
+            <!-- Dynamically populated via JS based on selected stream -->
+          </div>
+
+          <!-- Custom Subject Inline Drawer -->
+          <div id="customSubjectBox" class="custom-subject-box hidden">
+            <span class="input-prefix">Custom Subject:</span>
+            <input type="text" id="customSubjectInput"
+              placeholder="e.g. TypeScript, Rust, Kotlin, Swift, SQL, Biology, Algorithms..." />
+            <button type="button" id="applyCustomSubjectBtn" class="next-btn-primary sm">Set Custom</button>
+            <button type="button" id="cancelCustomSubjectBtn" class="next-pill-btn secondary sm">Cancel</button>
+          </div>
+          <input type="hidden" id="subjectInput" name="subject" value="python">
+        </div>
+
+        <!-- Curated Topic Boxes & Multi-Select Engine -->
+        <div class="section-block">
+          <div class="section-label-row">
+            <div class="section-label">
+              <span class="label-idx">3</span>
+              <span class="label-name">Choose Topic / Module</span>
+            </div>
+            <!-- Topic Selection Mode Segmented Control -->
+            <div class="topic-mode-segmented" id="topicModeGroup">
+              <button type="button" class="mode-pill active" data-mode="single">Single Topic</button>
+              <button type="button" class="mode-pill" data-mode="multi">☑ Multi-Topic Mix</button>
+              <button type="button" class="mode-pill" data-mode="all">📚 Full Syllabus</button>
+            </div>
+          </div>
+
+          <!-- Search & Quick Selection Toolbar -->
+          <div class="topic-toolbar">
+            <div class="topic-search-wrap">
+              <span class="topic-search-icon">🔍</span>
+              <input type="text" id="topicSearchInput"
+                placeholder="Search topics or subtopics (e.g. pointers, inheritance, thermodynamics)..." />
+              <button type="button" id="clearTopicSearchBtn" class="search-clear-btn hidden">&times;</button>
+            </div>
+            <div class="topic-action-btns">
+              <button type="button" id="selectAllTopicsBtn" class="next-pill-btn secondary sm">Select All</button>
+              <button type="button" id="clearAllTopicsBtn" class="next-pill-btn secondary sm">Clear</button>
+              <span class="topic-selection-counter" id="topicSelectionCounter">1 selected</span>
+            </div>
+          </div>
+
+          <!-- Active Focus Tags Cloud -->
+          <div id="activeTopicTagsBar" class="active-topic-tags-bar">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- Structured Topic Cards Grid -->
+          <div class="topic-grid" id="topicGrid">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <div class="custom-input-group">
+            <span class="input-prefix">Custom Topic / Focus:</span>
+            <input type="text" id="chapterInput" name="chapter"
+              placeholder="e.g. Dynamic Programming & Recursion, or specific textbook chapter"
+              value="OOP, Classes & Magic Methods" required>
+          </div>
+          <!-- AI Skill Coach Diagnostic Quick Banner -->
+          <div class="advisor-cta-card">
+            <div class="advisor-cta-left">
+              <span class="advisor-cta-icon">🧠</span>
+              <div>
+                <div class="advisor-cta-title">Unsure which difficulty matches your current level?</div>
+                <div class="advisor-cta-desc">Chat with Synapse AI Coach for a 60-second diagnostic test to discover
+                  your optimal quiz &amp; contest tier.</div>
+              </div>
+            </div>
+            <button type="button" id="openAdvisorFromConfigBtn" class="advisor-cta-btn">
+              <span>💬 Diagnose My Level</span>
+              <span>→</span>
+            </button>
+          </div>
+
+          <!-- Difficulty & Question Count -->
+          <div class="dual-columns">
+            <!-- Difficulty -->
+            <div class="section-block col">
+              <div class="section-label">
+                <span class="label-idx">4</span>
+                <span class="label-name">Difficulty (Elo Curve)</span>
+              </div>
+              <div class="diff-segmented" id="difficultyGroup">
+                <button type="button" class="diff-btn" data-value="easy">
+                  <span class="diff-dot easy"></span>
+                  <span>Easy (800)</span>
+                </button>
+                <button type="button" class="diff-btn active" data-value="medium">
+                  <span class="diff-dot medium"></span>
+                  <span>Medium (1400)</span>
+                </button>
+                <button type="button" class="diff-btn" data-value="hard">
+                  <span class="diff-dot hard"></span>
+                  <span>Hard (1900+)</span>
+                </button>
+              </div>
+              <input type="hidden" id="difficultyInput" value="medium">
+            </div>
+
+            <!-- Question Count -->
+            <div class="section-block col">
+              <div class="section-label">
+                <span class="label-idx">5</span>
+                <span class="label-name">Problem Count</span>
+              </div>
+              <div class="count-selector" id="countSelector">
+                <button type="button" class="count-btn" data-count="5">5</button>
+                <button type="button" class="count-btn active" data-count="10">10</button>
+                <button type="button" class="count-btn" data-count="20">20</button>
+                <button type="button" class="count-btn" data-count="30">30</button>
+                <button type="button" class="count-btn" data-count="60">60</button>
+                <button type="button" class="count-btn" data-count="custom">Custom</button>
+              </div>
+
+              <!-- Custom Stepper -->
+              <div id="customCountBox" class="custom-stepper-box hidden">
+                <span class="stepper-label">Specify count (1–100):</span>
+                <div class="stepper-controls">
+                  <button type="button" class="step-btn" id="decCountBtn">-</button>
+                  <input type="number" id="customCountInput" min="1" max="100" value="15">
+                  <button type="button" class="step-btn" id="incCountBtn">+</button>
+                </div>
+              </div>
+              <input type="hidden" id="finalQuestionCount" value="10">
+            </div>
+          </div>
+
+          <!-- Section 6: Custom Contest Controls & Timer -->
+          <div class="section-block">
+            <div class="section-label">
+              <span class="label-idx">6</span>
+              <span class="label-name">Contest Customization & Engine Settings</span>
+            </div>
+            <div class="custom-controls-grid">
+              <div class="ctrl-box">
+                <span class="ctrl-label">Question Engine:</span>
+                <div class="ctrl-options-row" id="engineModeGroup">
+                  <button type="button" class="ctrl-btn active" data-engine="gemini">✨ Gemini AI (Live Dynamic
+                    Questions)</button>
+                  <button type="button" class="ctrl-btn" data-engine="local">📚 Local Syllabus Bank</button>
+                </div>
+                <input type="hidden" id="engineModeInput" value="gemini">
+              </div>
+
+              <div class="ctrl-box">
+                <span class="ctrl-label">Timer Mode & Duration:</span>
+                <div class="ctrl-options-row" id="timerModeGroup">
+                  <button type="button" class="ctrl-btn active" data-mode="timed">⏱️ Speed (60s/Q)</button>
+                  <button type="button" class="ctrl-btn" data-mode="exam_3m">⏳ Extended JEE/NEET (180s/Q)</button>
+                  <button type="button" class="ctrl-btn" data-mode="mock_60m">⌛ 60m Subject Test</button>
+                  <button type="button" class="ctrl-btn" data-mode="full_180m">🏆 180m (3h Full Exam)</button>
+                  <button type="button" class="ctrl-btn" data-mode="zen">🧘 Zen (Untimed)</button>
+                </div>
+                <input type="hidden" id="timerModeInput" value="timed">
+              </div>
+
+              <div class="ctrl-box">
+                <span class="ctrl-label">Solutions Format:</span>
+                <div class="ctrl-options-row" id="reviewModeGroup">
+                  <button type="button" class="ctrl-btn active" data-review="exam">📝 Handwritten Derivations
+                    (Verified)</button>
+                  <button type="button" class="ctrl-btn" data-review="instant">⚡ Instant Reveal</button>
+                </div>
+                <input type="hidden" id="reviewModeInput" value="exam">
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="card-footer">
+            <button type="submit" id="generateBtn" class="next-btn-primary">
+              <span class="btn-text">Enter Contest / Start Quiz</span>
+              <span class="btn-arrow">⚡</span>
+            </button>
+          </div>
+      </form>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 2: COMPETITIVE LEADERBOARD PLATFORM (LeetCode / CodeChef Style)
+         ==================================================================== -->
+    <section id="leaderboardSection" class="studio-wrapper hidden">
+      <div class="hero-header">
+        <div class="tag-pill">
+          <span class="tag-mono">GLOBAL RANKINGS</span>
+          <span class="tag-divider">|</span>
+          <span>Competitive Division 1 & 2</span>
+        </div>
+        <h1 class="hero-title">Arena Leaderboard & Standings</h1>
+        <p class="hero-desc">
+          Top performers worldwide across Computer Science and PCMN Science disciplines. Climb the Elo rating ladder,
+          view persistent contest memory, and unlock master badges.
+        </p>
+      </div>
+
+      <!-- User's Personal Ranking Banner -->
+      <div class="user-standing-card">
+        <div class="standing-left">
+          <img id="myStandingAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=CoderHero" alt="My Avatar"
+            class="standing-avatar">
+          <div>
+            <div class="standing-name-row">
+              <h3 id="myStandingName">@guest_coder</h3>
+              <span class="standing-tag">You</span>
+            </div>
+            <p class="standing-sub" id="myStandingStats">Rank #14 • Rating 1500 • 28 Solved • 85% Accuracy</p>
+          </div>
+        </div>
+        <button id="editProfileBtnFromLeaderboard" class="next-btn-secondary sm">Edit Handle</button>
+      </div>
+
+      <!-- Dynamic Top 3 Podium Cards -->
+      <div class="podium-grid" id="podiumGridContainer">
+        <!-- Rendered dynamically by LeaderboardManager.renderPodium() -->
+      </div>
+
+      <!-- Leaderboard Filter Tabs -->
+      <div class="leaderboard-table-card">
+        <div class="table-filter-bar">
+          <div class="scope-tabs-bar">
+            <button type="button" class="scope-tab active" id="scopeAllTimeBtn">🏆 Global All-Time</button>
+            <button type="button" class="scope-tab" id="scopeWeekendBtn">⚡ Weekend Contest #42</button>
+          </div>
+          <div class="filter-pills">
+            <button type="button" class="tbl-filter-btn active" data-filter="all">All Disciplines</button>
+            <button type="button" class="tbl-filter-btn" data-filter="cse">CSE Coding</button>
+            <button type="button" class="tbl-filter-btn" data-filter="pcmn">Science & Academics</button>
+          </div>
+          <button id="returnToQuizBtn" class="next-btn-primary sm">Back to Practice →</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="arena-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Participant</th>
+                <th>Stream</th>
+                <th>Rating</th>
+                <th>Solved</th>
+                <th>Streak</th>
+                <th>Badge</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardTbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Embedded Persistent Contest Memory & Session History Card -->
+      <div class="leaderboard-table-card memory-embedded-card" id="leaderboardMemoryCard" style="margin-top: 2rem;">
+        <div class="table-filter-bar">
+          <div>
+            <span class="tag-mono" style="font-size: 0.75rem; color: var(--btn-focus);">PERSISTENT BROWSER MEMORY</span>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin-top: 0.25rem;">Practice
+              History & Problem Memory</h3>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" id="clearMemoryBtn" class="next-pill-btn secondary sm text-danger">Clear
+              Memory</button>
+          </div>
+        </div>
+
+        <div class="metrics-row" style="margin: 1.25rem 0;">
+          <div class="metric-box">
+            <span class="m-label">Memory Bank</span>
+            <span class="m-val" id="memUniqueCount">0</span>
+            <span class="m-sub">Unique Questions Encountered</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-label">Contests Finished</span>
+            <span class="m-val" id="memContestCount">0</span>
+            <span class="m-sub">Completed Sessions</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-label">Average Accuracy</span>
+            <span class="m-val" id="memAvgAccuracy">0%</span>
+            <span class="m-sub">Cumulative Precision</span>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="arena-table">
+            <thead>
+              <tr>
+                <th>Date / Time</th>
+                <th>Stream & Topic</th>
+                <th>Difficulty</th>
+                <th>Score</th>
+                <th>Accuracy</th>
+                <th>Rating Δ</th>
+              </tr>
+            </thead>
+            <tbody id="memoryHistoryTbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW: AI SKILL DIAGNOSTIC COACH & DIFFICULTY ADVISOR
+         ==================================================================== -->
+    <section id="aiAdvisorSection" class="studio-wrapper hidden">
+      <div class="advisor-container">
+        <!-- Header -->
+        <div class="advisor-header">
+          <div class="advisor-header-left">
+            <div class="advisor-avatar-box">
+              <span class="advisor-bot-avatar">🤖</span>
+              <span class="advisor-online-pulse" title="AI Coach Online"></span>
+            </div>
+            <div class="advisor-header-meta">
+              <div class="advisor-title-row">
+                <h2 class="advisor-title">Synapse AI Diagnostic Coach</h2>
+                <span class="advisor-badge">Neural Skill Matrix</span>
+              </div>
+              <p class="advisor-subtitle">Interactive 60-second assessment to diagnose your ability &amp; recommend
+                optimal difficulty.</p>
+            </div>
+          </div>
+          <div class="advisor-header-actions">
+            <button type="button" id="advisorResetBtn" class="next-btn-secondary sm" title="Restart Diagnostic Test">
+              <span>🔄 Restart</span>
+            </button>
+            <button type="button" id="advisorBackToStudioBtn" class="next-pill-btn secondary sm"
+              title="Return to Arena Studio">
+              <span>← Back to Studio</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Diagnostic Stepper -->
+        <div class="advisor-stepper">
+          <div class="advisor-step-item active" id="advStep1">
+            <span class="step-num">1</span>
+            <span class="step-lbl">Background</span>
+          </div>
+          <div class="advisor-step-line" id="advLine1"></div>
+          <div class="advisor-step-item" id="advStep2">
+            <span class="step-num">2</span>
+            <span class="step-lbl">Diagnostic Challenge</span>
+          </div>
+          <div class="advisor-step-line" id="advLine2"></div>
+          <div class="advisor-step-item" id="advStep3">
+            <span class="step-num">3</span>
+            <span class="step-lbl">Contest Speed</span>
+          </div>
+          <div class="advisor-step-line" id="advLine3"></div>
+          <div class="advisor-step-item" id="advStep4">
+            <span class="step-num">4</span>
+            <span class="step-lbl">Assessment &amp; Recommendation</span>
+          </div>
+        </div>
+
+        <!-- Chat Stream Window -->
+        <div class="advisor-chat-stream" id="advisorChatStream">
+          <!-- Messages & typing indicator rendered dynamically -->
+        </div>
+
+        <!-- Quick Response Option Chips -->
+        <div class="advisor-chips-wrap" id="advisorChipsWrap"></div>
+
+        <!-- Freeform Input Bar -->
+        <form id="advisorForm" class="advisor-input-bar">
+          <input type="text" id="advisorTextInput" placeholder="Type your answer, or click an option above..."
+            autocomplete="off">
+          <button type="submit" id="advisorSendBtn" class="next-btn-primary sm">
+            <span>Send</span>
+            <span>➤</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 3: GENERATION LOADING STATE
+         ==================================================================== -->
+    <section id="loadingSection" class="next-card loading-view hidden">
+      <div class="spinner-container">
+        <div class="next-spinner"></div>
+      </div>
+      <h3 class="loading-heading" id="loadingStatusText">Generating your contest problem set...</h3>
+      <p class="loading-sub" id="loadingSubText">Synthesizing multiple-choice coding challenges, test scenarios, and
+        handwritten derivations.</p>
+
+      <div class="loading-progress-line">
+        <div class="progress-bar-inner" id="progressFill"></div>
+      </div>
+
+      <div class="terminal-steps">
+        <div class="term-step active" id="step1Badge">● Loading Topic Module</div>
+        <div class="term-step" id="step2Badge">● Compiling Code Problems</div>
+        <div class="term-step" id="step3Badge">● Verifying Answer Keys</div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 4: LIVE CONTEST / QUIZ PLAYER (Exam Mode)
+         ==================================================================== -->
+    <section id="quizPlayerSection" class="next-card quiz-view hidden">
+      <div class="quiz-player-nav">
+        <div class="quiz-meta-info">
+          <span class="meta-pill" id="metaSubjectTag">Python</span>
+          <span class="meta-dot">•</span>
+          <span class="meta-text" id="metaChapterTag">OOP & Classes</span>
+          <span class="meta-level" id="metaDifficultyTag">Medium</span>
+        </div>
+
+        <div class="player-hud">
+          <div class="hud-timer">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span id="quizTimer">00:00</span>
+          </div>
+
+          <button id="restartConfigBtn" class="next-pill-btn secondary sm text-danger">
+            <span>Quit</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Track -->
+      <div class="player-track">
+        <div class="track-header">
+          <span>Problem <strong id="currentQuestionNum">1</strong> of <span id="totalQuestionsNum">10</span></span>
+          <span class="exam-mode-badge">⚡ Contest Mode</span>
+        </div>
+        <div class="track-line">
+          <div class="track-fill" id="quizBarFill" style="width: 10%;"></div>
+        </div>
+      </div>
+
+      <!-- Question Canvas -->
+      <div class="question-canvas" id="questionCanvas">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+      <!-- Footer Navigation Controls -->
+      <div class="player-footer">
+        <button id="prevQuestionBtn" class="next-btn-secondary" disabled>
+          ← Previous
+        </button>
+        <span class="footer-tip">💡 Complete step-by-step solutions are revealed after final submission.</span>
+        <button id="nextQuestionBtn" class="next-btn-primary sm">
+          <span>Next</span>
+          <span>→</span>
+        </button>
+        <button id="finishQuizBtn" class="next-btn-primary sm finish-btn hidden">
+          <span>Submit Contest</span>
+          <span>✓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 5: FINAL SCORECARD & HANDWRITTEN SOLUTIONS REVIEW
+         ==================================================================== -->
+    <section id="scorecardSection" class="next-card scorecard-view hidden">
+      <div class="scorecard-top">
+        <div class="scorecard-tag">Submission Verified</div>
+        <h2 id="scorecardGreeting">Contest Results & Solutions</h2>
+        <p>Review your score, rating delta, and teacher-style handwritten derivations.</p>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric-box">
+          <span class="m-label">Accuracy</span>
+          <span class="m-val" id="metricAccuracy">80%</span>
+          <span class="m-sub" id="metricAccuracySub">Percentage Correct</span>
+        </div>
+        <div class="metric-box">
+          <span class="m-label">Score & Rating</span>
+          <span class="m-val" id="metricScore">8 / 10</span>
+          <span class="m-sub positive-badge" id="metricRatingDelta">+35 Elo Rating</span>
+        </div>
+        <div class="metric-box">
+          <span class="m-label">Time Taken</span>
+          <span class="m-val" id="metricTime">03:45</span>
+          <span class="m-sub" id="metricTimeSub">Total Duration</span>
+        </div>
+      </div>
+
+      <!-- Handwritten Step-by-Step Solutions Panel -->
+      <div class="diagnostic-panel">
+        <div class="panel-top">
+          <div>
+            <h3>Handwritten Step-by-Step Solutions</h3>
+            <span class="panel-sub">Neatly structured code analysis & mathematical derivations.</span>
+          </div>
+          <div class="panel-buttons">
+            <button id="exportJsonBtn" class="next-pill-btn secondary sm">Copy JSON</button>
+            <button id="printQuizBtn" class="next-pill-btn secondary sm">Print / PDF</button>
+          </div>
+        </div>
+        <div class="diagnostic-list" id="reviewQuestionsList">
+          <!-- Rendered handwritten solution cards -->
+        </div>
+      </div>
+
+      <div class="scorecard-actions">
+        <button type="button" id="viewLeaderboardFromScorecardBtn" class="next-btn-secondary">🏆 View Leaderboard &
+          Standings</button>
+        <button type="button" id="retakeSameQuizBtn" class="next-btn-secondary">Retake Contest</button>
+        <button type="button" id="createNewQuizBtn" class="next-btn-primary">New Practice Set</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       MODALS
+       ==================================================================== -->
+
+  <!-- Modal: Firebase Google Auth & Profile Customization -->
+  <div id="profileAuthModal" class="modal-backdrop hidden">
+    <div class="modal-box profile-modal-box">
+      <div class="modal-top">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span class="step-chip" id="profileStepChip">🔒 Step 1 of 2: Required</span>
+          <h3 id="profileModalTitle" style="margin: 0;">Google Authentication Required</h3>
+        </div>
+        <button id="closeProfileModal" class="close-x" title="Close" style="display: none;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <!-- Mandatory Google Authentication Banner -->
+        <div id="authRequiredNotice" class="auth-gate-alert">
+          <span class="auth-gate-icon">🔒</span>
+          <span><strong>Required First Step:</strong> Google Authentication is required to enter the Synapse Arena,
+            verify syllabus access, and record competitive ratings.</span>
+        </div>
+
+        <!-- Live Firebase Project Status & Environment Banner -->
+        <div class="firebase-status-badge">
+          <div style="display:flex;align-items:center;gap:0.4rem;">
+            <span class="status-pulse-dot"></span>
+            <span>Firebase: <strong id="firebaseProjectName">quiz-generator-ae9a4</strong></span>
+          </div>
+          <span class="status-chip" id="firebaseLiveChip">Ready</span>
+        </div>
+
+        <div id="envNoticeBox" class="env-notice-banner hidden">
+          <span>⚠️ <strong>Environment Notice:</strong> Opened via file://. For Firebase Google OAuth popups, open via
+            <a href="http://localhost:3000" id="envLocalhostLink">http://localhost:3000</a>.</span>
+        </div>
+
+        <!-- Auth Method Selector Tabs -->
+        <div class="auth-tabs-row">
+          <button type="button" class="auth-tab-btn active" id="tabGoogleAuth" data-auth-tab="google">
+            <span>Google Auth (Primary)</span>
+          </button>
+          <button type="button" class="auth-tab-btn" id="tabEmailAuth" data-auth-tab="email">
+            <span>Email / Password</span>
+          </button>
+        </div>
+
+        <!-- Google Sign In Section -->
+        <div id="googleAuthSection" class="google-auth-section">
+          <button type="button" id="googleSignInBtn" class="google-btn">
+            <svg class="google-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+              <path fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            </svg>
+            <span id="googleBtnText">Sign In with Google (Required to Enter)</span>
+          </button>
+
+          <!-- Error Diagnostic Card (appears if error occurs) -->
+          <div id="googleAuthErrorCard" class="auth-error-card hidden">
+            <div class="auth-error-header">
+              <span class="auth-error-icon">⚠️</span>
+              <strong id="authErrorTitle">Authentication Error</strong>
+            </div>
+            <p id="authErrorMsg" class="auth-error-body"></p>
+            <div id="authConsoleSteps" class="auth-console-steps">
+              <span class="step-guide-title">How to enable Google in Firebase Console:</span>
+              <ol>
+                <li>Open <a
+                    href="https://console.firebase.google.com/project/quiz-generator-ae9a4/authentication/providers"
+                    target="_blank" rel="noopener">Firebase Console &gt; Authentication &gt; Sign-in method</a></li>
+                <li>Click <strong>Google</strong> &rarr; Toggle <strong>Enable</strong> &rarr; Pick Support email &rarr;
+                  Click <strong>Save</strong></li>
+                <li>Or switch to <strong>"Email / Password"</strong> tab above to connect immediately!</li>
+              </ol>
+            </div>
+            <button type="button" id="simulatedGoogleAuthBtn" class="next-pill-btn secondary sm"
+              style="margin-top: 0.6rem; width: 100%;">
+              <span>⚡ Fast Google Connect (Local Verification)</span>
+            </button>
+          </div>
+
+          <button type="button" id="googleSignOutBtn" class="next-pill-btn secondary sm hidden"
+            style="margin-top: 0.6rem; width: 100%;">
+            <span>Sign Out of Google Account</span>
+          </button>
+          <span class="auth-note" id="authNoteText">🔒 Google Authentication is required first to access the Synapse
+            Arena and record ratings.</span>
+        </div>
+
+        <!-- Email & Password Auth Section (Hidden by default, activated via tab) -->
+        <div id="emailAuthSection" class="email-auth-section hidden">
+          <div class="modal-input-wrap">
+            <label for="authEmailInput">Email Address</label>
+            <input type="email" id="authEmailInput" placeholder="developer@example.com" autocomplete="email">
+          </div>
+          <div class="modal-input-wrap">
+            <label for="authPasswordInput">Password</label>
+            <input type="password" id="authPasswordInput" placeholder="Min 6 characters"
+              autocomplete="current-password">
+          </div>
+          <div class="auth-action-buttons">
+            <button type="button" id="emailSignInBtn" class="next-btn-primary sm">Sign In</button>
+            <button type="button" id="emailSignUpBtn" class="next-pill-btn secondary sm">Register in Firebase</button>
+          </div>
+          <div id="emailAuthStatusMsg" class="auth-note" style="margin-top:0.35rem;"></div>
+        </div>
+
+        <div class="divider-text"><span>Cloud Profile & Customization</span></div>
+
+        <!-- Custom Username Form -->
+        <div class="profile-edit-fields">
+          <div class="avatar-preview-wrap">
+            <img id="avatarPreviewLarge" src="https://api.dicebear.com/7.x/bottts/svg?seed=CoderHero" alt="Avatar"
+              class="avatar-large">
+            <button type="button" id="shuffleAvatarBtn" class="pill-btn sm outline">🎲 New Avatar</button>
+          </div>
+
+          <div class="modal-input-wrap">
+            <label for="customHandleInput">Customize Display Handle</label>
+            <input type="text" id="customHandleInput" placeholder="e.g. alex_coder" value="guest_coder">
+            <span class="modal-hint">This name will appear on the global leaderboard & contest certificates.</span>
+          </div>
+
+          <div class="modal-input-wrap">
+            <label for="preferredStreamInput">Primary Stream Focus</label>
+            <select id="preferredStreamInput" class="custom-select">
+              <option value="cse">Computer Science (CSE)</option>
+              <option value="jee">IIT JEE Mains & Advanced (PCM)</option>
+              <option value="neet">NEET Medical Arena (PCB/PCMB)</option>
+              <option value="pcmn">Science & Academics (PCMN + Bio & Social)</option>
+            </select>
+          </div>
+
+          <!-- Cloud sync status banner -->
+          <div id="cloudSyncStatus" class="cloud-sync-status">
+            <span class="sync-icon">☁️</span>
+            <span id="cloudSyncStatusText">Firebase Firestore: Ready to receive user data</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-bottom" style="flex-direction: column; gap: 0.5rem;">
+        <button id="saveProfileBtn" class="next-btn-primary full-width">Sign In with Google to Continue →</button>
+        <button type="button" id="skipToApiBtn" class="next-pill-btn secondary sm"
+          style="width: 100%; justify-content: center; display: none;">
+          <span>Skip & Continue as Guest →</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Modal: Eye-Catching Cyberpunk AI API Connecting Animation Popup -->
+  <div id="aiConnectingModal" class="modal-backdrop hidden">
+    <div class="modal-box ai-connecting-box">
+      <!-- Ambient Laser Scanline Effect -->
+      <div class="ai-scanline"></div>
+
+      <!-- Orbital Gyro Spinner with Multi-Layer Glow -->
+      <div class="ai-connecting-spinner-wrap">
+        <div class="ai-spinner-outer-orbit"></div>
+        <div class="ai-spinner-mid-orbit"></div>
+        <div class="ai-spinner-inner-orbit"></div>
+        <div class="ai-spinner-ring"></div>
+        <div class="ai-energy-waves"></div>
+        <div class="ai-spinner-core">⚡</div>
+      </div>
+
+      <!-- Connection Status Chips -->
+      <div class="ai-quantum-tag-row">
+        <span class="ai-quantum-tag" id="aiQuantumTag">⚡ NEURAL SYNC</span>
+        <span class="ai-quantum-latency" id="aiQuantumLatency">12ms • TLS 1.3</span>
+      </div>
+
+      <h3 class="ai-connecting-title">AI API is Connecting...</h3>
+      <p class="ai-connecting-msg" id="aiConnectingMsg">
+        Establishing quantum bridge to Google Gemini Flash &amp; Neural Syllabus Bank...
+      </p>
+
+      <!-- Dynamic Progress Ticker Bar -->
+      <div class="ai-progress-track">
+        <div class="ai-progress-bar" id="aiProgressBar"></div>
+      </div>
+
+      <!-- Pulsing Data Transmission Dots -->
+      <div class="ai-connecting-dots">
+        <span class="pulse-dot"></span>
+        <span class="pulse-dot"></span>
+        <span class="pulse-dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Gemini API Key & Connection Tester -->
+  <div id="apiKeyModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-top">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <button type="button" id="apiKeyStepBackBtn" class="next-pill-btn secondary sm"
+            style="padding: 0.25rem 0.6rem; font-size: 0.75rem; border-radius: 9999px;" title="Back to Step 1">← Step
+            1</button>
+          <span class="step-chip" id="apiKeyStepChip">Step 2 of 2</span>
+          <h3 style="margin: 0;">🔑 Gemini AI & Connection</h3>
+        </div>
+        <button id="closeApiKeyModal" class="close-x" title="Move to Main Arena">&times;</button>
+      </div>
+      <div class="modal-content">
+        <p>Configure your Google Gemini Flash API key for live AI questions. <strong>If the API is busy, offline, or you
+            prefer offline practice</strong>, click "Move On to Main Arena" below to proceed immediately!</p>
+
+        <div class="modal-input-wrap">
+          <label for="apiKeyInput">
+            <span>Gemini API Key</span>
+            <span class="key-tag" id="keyBadgeTag"
+              style="background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);">Custom
+              Key</span>
+          </label>
+          <div class="input-key-row">
+            <input type="password" id="apiKeyInput" value="" autocomplete="off" spellcheck="false"
+              placeholder="Paste your Gemini AI API key here (AIzaSy...)">
+            <button type="button" id="toggleApiKeyVisibility" class="toggle-eye-btn" title="Show/Hide Key">
+              👁️
+            </button>
+          </div>
+
+          <!-- Compact Free Gemini API Key Direct Link Card -->
+          <div class="get-free-key-box"
+            style="margin-top: 0.55rem; padding: 0.45rem 0.8rem; border-radius: var(--radius-sm); background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.35rem;">
+              <span style="color: #60a5fa;">✨</span> Need a free key? Instant at Google AI Studio
+            </div>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer"
+              class="get-free-key-btn" title="Open Google AI Studio to get a free API key">
+              <span>Get Free Key</span>
+              <span>↗</span>
+            </a>
+          </div>
+
+          <!-- Live API Key Verification Status Alert -->
+          <div id="apiKeyTestResult" class="api-status-banner neutral" style="margin-top: 0.65rem;">
+            <span class="banner-icon">ℹ️</span>
+            <span id="apiKeyStatusText">Paste your key above & click "Test Connection", or move to main arena for
+              verified syllabus bank.</span>
+          </div>
+
+          <span class="modal-hint">Key is saved locally only in your browser's private <code>localStorage</code>. Never
+            shared.</span>
+        </div>
+      </div>
+      <div class="modal-bottom" style="gap: 0.65rem; flex-direction: column;">
+        <div id="offlineCalloutHint" class="offline-callout-hint" style="display: none;">
+          <span>⚡ API Offline? Practice 100% Free with Verified Syllabus Bank 👇</span>
+        </div>
+        <button type="button" id="moveOnToMainBtn" class="next-btn-primary full-width"
+          style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #10b981; color: #fff; font-weight: 700; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); padding: 0.75rem 1.15rem; min-height: 44px; font-size: 0.95rem;">
+          <span>🚀 Move On to Main Arena (Offline / Free Bank) →</span>
+        </button>
+        <div style="display: flex; gap: 0.6rem; width: 100%; align-items: stretch;">
+          <button type="button" id="testApiKeyBtn" class="next-btn-secondary"
+            style="flex: 1; min-height: 42px; font-size: 0.9rem; font-weight: 600; padding: 0.6rem 0.8rem;">
+            <span>⚡ Test Connection</span>
+          </button>
+          <button type="button" id="saveApiKeyBtn" class="next-btn-primary connect-gemini-btn"
+            style="flex: 1.25; min-height: 42px; font-size: 0.95rem; font-weight: 700; padding: 0.6rem 1rem; background: linear-gradient(135deg, #ec4899 0%, #d946ef 40%, #8b5cf6 100%); box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35); border: none;">
+            <span>Connect Gemini AI →</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Modal: API Error & Seamless Fallback Selector -->
+  <div id="apiErrorModal" class="modal-backdrop hidden">
+    <div class="modal-box alert-box">
+      <div class="modal-top">
+        <h3 id="apiErrorModalTitle"
+          style="color: var(--color-warning, #f59e0b); display: flex; align-items: center; gap: 0.5rem;">
+          <span id="apiErrorIcon">⚡</span>
+          <span id="apiErrorHeading">Gemini AI Traffic Notice</span>
+        </h3>
+        <button id="closeApiErrorModal" class="close-x">&times;</button>
+      </div>
+      <div class="modal-content">
+        <p id="apiErrorSubHeading"
+          style="font-weight: 700; color: var(--text-heading); margin-bottom: 0.5rem; font-size: 1.05rem;">
+          Gemini AI is experiencing high traffic (Server busy).
+        </p>
+        <div class="api-error-card" id="apiErrorDetailsText">
+          Google Gemini servers are currently under heavy load or rate-limited (HTTP 429/503).
+        </div>
+        <p id="apiErrorQuestionText"
+          style="font-size: 0.95rem; color: var(--text-heading); margin-top: 1rem; font-weight: 600;">
+          Would you like to practice with our curated syllabus questions?
+        </p>
+      </div>
+      <div class="modal-bottom" style="gap: 0.75rem; flex-wrap: wrap;">
+        <button type="button" id="apiErrorGoLocalBtn" class="next-btn-primary sm">
+          ⚡ Practice with Curated Syllabus Questions →
+        </button>
+        <button type="button" id="apiErrorRetryBtn" class="next-btn-secondary">
+          🔄 Retry Gemini
+        </button>
+        <button type="button" id="apiErrorAddKeyBtn" class="next-btn-secondary">
+          🔑 Enter New API Key
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Celebration Popup on Correct Answer -->
+  <div id="correctPopupModal" class="modal-backdrop hidden">
+    <div class="modal-box celebration-box">
+      <div class="celebration-badge-wrap">
+        <div class="celebration-icon">🎉</div>
+      </div>
+      <h3 class="celebration-title">Correct Answer!</h3>
+      <p class="celebration-msg" id="popupEncouragementText">Great job! You solved this problem.</p>
+
+      <div class="celebration-pill-row">
+        <span class="celeb-pill">+10 Rating</span>
+        <span class="celeb-pill" id="popupStreakText">Streak 🔥</span>
+      </div>
+
+      <div class="celebration-footer">
+        <button id="popupNextBtn" class="next-btn-primary full-width">
+          Continue to Next Problem →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Feedback on Incorrect Answer -->
+  <div id="incorrectPopupModal" class="modal-backdrop hidden">
+    <div class="modal-box celebration-box incorrect-box">
+      <div class="celebration-badge-wrap incorrect-wrap">
+        <div class="celebration-icon">📌</div>
+      </div>
+      <h3 class="celebration-title">Answer Recorded!</h3>
+      <p class="celebration-msg">
+        Don't worry! Complete handwritten code analysis and derivations are waiting for you after submission.
+      </p>
+
+      <div class="celebration-footer">
+        <button id="popupIncorrectNextBtn" class="next-btn-secondary full-width">
+          Next Problem →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- High Demand / Fallback Dialog -->
+  <div id="highDemandModal" class="modal-backdrop hidden">
+    <div class="modal-box alert-box">
+      <div class="modal-top center">
+        <div class="alert-badge">⚡ Offline Syllabus Bank</div>
+      </div>
+      <div class="modal-content center">
+        <p id="highDemandMessage">
+          Gemini AI endpoints are experiencing heavy traffic. Loading verified syllabus questions for uninterrupted
+          testing!
+        </p>
+      </div>
+      <div class="modal-bottom center">
+        <button id="retryApiBtn" class="next-btn-secondary">Retry Gemini</button>
+        <button id="useOfflineBankBtn" class="next-btn-primary sm">Load Verified Bank</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-wrapper"></div>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
