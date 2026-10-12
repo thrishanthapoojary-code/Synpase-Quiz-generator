@@ -1,5 +1,7 @@
 # ▲ Synapse • Next-Gen AI Quiz Studio
 
+🚀 **Live Demo:** [https://synpase-arena.netlify.app/](https://synpase-arena.netlify.app/)
+
 A high-performance, intelligence-graded assessment application inspired by the **Next.js / Vercel** design system. Powered directly by **Google Gemini 3.8 Flash** with first-class **Dark & Light Mode**, instant client & server execution, and zero-downtime offline fallbacks.
 
 ---
