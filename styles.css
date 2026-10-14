@@ -1957,6 +1957,7 @@ body {
    Celebration Popups (Correct / Confirmation)
    ========================================================================== */
 .celebration-box {
+  position: relative;
   text-align: center;
   max-width: 440px;
   padding: 2.5rem 2rem;
@@ -1966,6 +1967,51 @@ body {
   border: 1px solid var(--border-glass);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
   animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.celebration-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.15rem;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  padding: 0;
+}
+
+.celebration-close-btn:hover {
+  color: var(--text-heading);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-glass, rgba(255, 255, 255, 0.22));
+  transform: scale(1.08);
+}
+
+.celebration-close-btn:active {
+  transform: scale(0.96);
+}
+
+[data-theme="light"] .celebration-close-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .celebration-close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.16);
+  color: var(--text-heading);
 }
 
 @keyframes popIn {

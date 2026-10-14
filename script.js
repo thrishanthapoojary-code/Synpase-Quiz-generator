@@ -4612,11 +4612,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Interactive modal helper for SPA history
 const ModalHistory = {
   isModalOpen() {
-    const selector = '#profileAuthModal:not(.hidden), #apiKeyModal:not(.hidden), #highDemandModal:not(.hidden), #apiErrorModal:not(.hidden)';
+    const selector = '#profileAuthModal:not(.hidden), #apiKeyModal:not(.hidden), #highDemandModal:not(.hidden), #apiErrorModal:not(.hidden), #correctPopupModal:not(.hidden), #incorrectPopupModal:not(.hidden)';
     return document.querySelector(selector) !== null;
   },
   closeOpenModals() {
-    const selector = '#profileAuthModal:not(.hidden), #apiKeyModal:not(.hidden), #highDemandModal:not(.hidden), #apiErrorModal:not(.hidden)';
+    const selector = '#profileAuthModal:not(.hidden), #apiKeyModal:not(.hidden), #highDemandModal:not(.hidden), #apiErrorModal:not(.hidden), #correctPopupModal:not(.hidden), #incorrectPopupModal:not(.hidden)';
     const modals = document.querySelectorAll(selector);
     let closedCount = 0;
     modals.forEach(m => {
@@ -4737,7 +4737,26 @@ function initModalWatchers() {
   const modalObserver = new MutationObserver(() => syncModalState());
   document.querySelectorAll('.modal-backdrop').forEach(modal => {
     modalObserver.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        if (modal.id === 'profileAuthModal' && AppState.isOnboarding && (!AppState.user || !AppState.user.isGoogleAuth)) {
+          return;
+        }
+        if (modal.id === 'aiConnectingModal') {
+          return;
+        }
+        modal.classList.add('hidden');
+      }
+    });
   });
+
+  // Global Escape key listener to close any open modal
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      ModalHistory.closeOpenModals();
+    }
+  });
+
   syncModalState();
 }
 
@@ -5464,6 +5483,28 @@ function bindStudioEvents() {
     document.getElementById('incorrectPopupModal').classList.add('hidden');
     advanceToNextQuestion();
   });
+
+  // Close marks for interactive celebration/feedback and high demand popups
+  const closeIncorrectBtn = document.getElementById('closeIncorrectPopupBtn');
+  if (closeIncorrectBtn) {
+    closeIncorrectBtn.addEventListener('click', () => {
+      document.getElementById('incorrectPopupModal').classList.add('hidden');
+    });
+  }
+
+  const closeCorrectBtn = document.getElementById('closeCorrectPopupBtn');
+  if (closeCorrectBtn) {
+    closeCorrectBtn.addEventListener('click', () => {
+      document.getElementById('correctPopupModal').classList.add('hidden');
+    });
+  }
+
+  const closeHighDemandBtn = document.getElementById('closeHighDemandModal');
+  if (closeHighDemandBtn) {
+    closeHighDemandBtn.addEventListener('click', () => {
+      document.getElementById('highDemandModal').classList.add('hidden');
+    });
+  }
 
   // Quiz Player Navigation Buttons
   document.getElementById('prevQuestionBtn').addEventListener('click', () => {
